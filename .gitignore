@@ -1,0 +1,25 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignore logs and visitor snapshots
+logs/
+static/snapshots/
+static/uploads/
+
+# Ignore local environment and config
+.env
+
+.venv/
+
+# Ignore test image/video artifacts
+debug_frame.jpg
+test_image.jpg
+test_video.mp4
+
+# Ignore OS/system files
+.DS_Store
+Thumbs.db
+
+
