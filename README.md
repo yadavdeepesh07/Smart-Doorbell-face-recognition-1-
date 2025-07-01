@@ -30,27 +30,66 @@ A Python-powered smart doorbell system that captures live video, detects and rec
 
 ## 🗂️ Project Structure
 
-smart-doorbell/
-├── app/
-│ ├── aws_rekognition.py
-│ ├── config.py
-│ ├── notification.py
-│ ├── sms_alert.py
-│ ├── visitor_log.py
-├── logs/
-│ └── visitor_log.json
-│ └── snapshots/
-├── static/
-│ └── uploads/
-│ └── snapshots/
-├── templates/
-│ ├── index.html
-│ └── manage_users.html
-├── dashboard.py
-├── run.py
-├── .env # Not tracked — for credentials
-├── requirements.txt
-├── README.md
+Smart_Doorbell_with_Face_Recognition/
+│
+├── run.py                          # 🔁 Main script to start the camera + detection
+
+├── dashboard.py                    # 📊 Flask web dashboard (UI)
+
+├── requirements.txt                # 📦 Python dependencies
+
+├── .env                            # 🔐 Environment variables (email creds, AWS, etc.)
+
+├── test/
+
+    ├── test_aws.py
+    
+    ├── test_rekognition.py
+    
+├── start_smart_doorbell.bat
+
+├── venv                       # Environment for the project 
+│
+├── app/                            # 📁 Core backend logic
+
+│   ├── __init__.py
+│   ├── aws_rekognition.py          # 🔍 AWS face search, index, delete, etc.
+
+│   ├── config.py                   # ⚙️  Read/write environment or JSON config
+
+│   ├── visitor_log.py              # 📝 JSON + CSV logging for known/unknown visitors
+
+│   ├── notification.py             # ✉️  Email (and SMS if enabled) alerts
+
+│   └── sms_alert.py                # 📱 (Optional) Twilio SMS alerts (if enabled)
+
+│
+├── logs/                           # 🗃️ Visitor log files
+
+│   ├── visitor_log.json            # ✅ Visitor log in JSON
+
+│   ├── visitor_log.csv             # ✅ Visitor log in CSV
+
+│   └── snapshots/                  # 🖼️  Original captured frames
+│       └── [name_timestamp].jpg
+
+│
+├── static/                         # 🌐 Static files served to frontend
+
+│   ├── snapshots/                  # 🖼️ Snapshots used by dashboard
+
+│   └── uploads/                    # 📤 Uploaded images for adding users
+│
+├── templates/                      # 📄 HTML pages (Flask Jinja2 templates)
+
+│   ├── index.html                  # 🏠 Home (optional or redirect)
+
+│   ├── visitors.html               # 📋 Visitor log UI
+
+│   ├── manage_user.html
+
+    ├── privacy.html
+
 
 
 ---
