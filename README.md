@@ -157,7 +157,12 @@ USER_PHONE=+919xxxxxxxxx
 
 Screenshots
 
-![alt text](image.png)
+![Screenshot 2025-07-01 165750](https://github.com/user-attachments/assets/b506d916-b1f2-4c26-b575-e1998673b168)
+![Screenshot 2025-07-01 165813](https://github.com/user-attachments/assets/9460ebca-90f9-43f0-b313-5539eb49ed8e)
+![Screenshot 2025-07-01 165739](https://github.com/user-attachments/assets/4cef5d99-7fb2-4ccf-a882-0e4ae2f7b9e2)
+
+
+
 
 
 
