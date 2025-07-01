@@ -53,4 +53,4 @@ def log_visitor(name, confidence, frame):
             writer.writerow(["Name", "Confidence", "Timestamp", "Snapshot_Path"])
         writer.writerow([name, round(confidence, 2), entry["timestamp"], public_path])
 
-    print(f"✅ Visitor logged: {entry}")
+    print(f"Visitor logged: {entry}")

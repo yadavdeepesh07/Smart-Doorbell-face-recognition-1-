@@ -46,7 +46,7 @@ def visitors():
                 logs = json.load(f)
                 print("🔎 Logs loaded:", logs)
             except json.JSONDecodeError as e:
-                print("❌ JSON decode error:", e)
+                print("JSON decode error:", e)
                 logs = []
 
     if request.method == "POST":
@@ -58,10 +58,10 @@ def visitors():
             date_match = search_date in entry["timestamp"] if search_date else True
             if name_match and date_match:
                 filtered_logs.append(entry)
-        print("✅ Filtered logs:", filtered_logs)
+        print("Filtered logs:", filtered_logs)
         return render_template("visitors.html", logs=filtered_logs)
 
-    print("✅ All logs passed to template:", logs)
+    print("All logs passed to template:", logs)
     return render_template("visitors.html", logs=logs)
 
 @app.route("/export_visitors")
@@ -107,7 +107,7 @@ def manage_users():
             return redirect(url_for("manage_users"))
 
         filename = secure_filename(f"{name}.jpg")
-        path = os.path.join(UPLOAD_FOLDER, filename)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         image.save(path)
 
         try:
@@ -117,7 +117,7 @@ def manage_users():
             faces = face_cascade.detectMultiScale(gray, 1.1, 4)
             if len(faces) == 0:
                 os.remove(path)
-                flash("❌ No face detected in the image. Please upload a clear front-facing photo.", "danger")
+                flash("No face detected in the image. Please upload a clear front-facing photo.", "danger")
                 return redirect(url_for("manage_users"))
         except Exception as e:
             flash(f"⚠️ Face detection failed: {e}", "warning")
@@ -126,10 +126,10 @@ def manage_users():
             success = index_face(f.read(), name)
 
         if success:
-            flash(f"✅ {name} added to face collection.", "success")
+            flash(f"{name} added to face collection.", "success")
         else:
             os.remove(path)
-            flash("❌ AWS Rekognition could not index the face. Try another image.", "danger")
+            flash("AWS Rekognition could not index the face. Try another image.", "danger")
 
         return redirect(url_for("manage_users"))
 
@@ -139,9 +139,9 @@ def manage_users():
 @app.route("/delete_user/<face_id>")
 def delete_user(face_id):
     if delete_face(face_id):
-        flash("🗑️ Face deleted successfully.", "success")
+        flash("Face deleted successfully.", "success")
     else:
-        flash("❌ Failed to delete face.", "danger")
+        flash("Failed to delete face.", "danger")
     return redirect(url_for("manage_users"))
 
 @app.route("/export_users")

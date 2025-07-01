@@ -10,7 +10,7 @@ def main():
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
     if not cap.isOpened():
-        print("❌ Could not open webcam.")
+        print("Could not open webcam.")
         return
 
     print("📷 Smart Doorbell Running — Press 'q' to quit.")
@@ -20,7 +20,7 @@ def main():
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("❌ Frame capture failed.")
+            print("Frame capture failed.")
             break
 
         # Live feed toggle
@@ -32,12 +32,12 @@ def main():
             last_check_time = time.time()
 
             if not get_config("ENABLE_RECOGNITION", True):
-                print("🔒 Face recognition disabled by user.")
+                print("Face recognition disabled by user.")
                 continue
 
             image_bytes = frame_to_bytes(frame)
             result = search_face(image_bytes)
-            print("🔍 Rekognition result:", result)
+            print("Rekognition result:", result)
 
             if result.get("reason") == "no_face_detected":
                 print("⚠️ No face detected.")
@@ -52,7 +52,7 @@ def main():
 
                     if get_env("ENABLE_EMAIL", "True") == "True":
                         send_email_notification(
-                            subject="🚪 Visitor Alert",
+                            subject="Visitor Alert",
                             body=f"{name} is at the door! (Confidence: {confidence:.2f}%)",
                             to_email=get_env("EMAIL_ADDRESS")
                         )
@@ -65,7 +65,7 @@ def main():
 
                 if get_env("ENABLE_EMAIL", "True") == "True":
                     send_email_notification(
-                        subject="🚨 Unknown Visitor Alert",
+                        subject="Unknown Visitor Alert",
                         body="An unrecognized person is at your door. Check the dashboard.",
                         to_email=get_env("EMAIL_ADDRESS")
                     )
@@ -75,7 +75,7 @@ def main():
 
     cap.release()
     cv2.destroyAllWindows()
-    print("👋 Smart Doorbell session ended.")
+    print("Smart Doorbell session ended.")
 
 if __name__ == "__main__":
     main()

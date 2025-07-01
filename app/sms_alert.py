@@ -10,10 +10,10 @@ def send_sms_alert(name, confidence):
 
     client = Client(account_sid, auth_token)
 
-    body = f"🚨 {name} is at your door! Confidence: {confidence:.2f}%"
+    body = f"{name} is at your door! Confidence: {confidence:.2f}%"
     message = client.messages.create(
         body=body,
         from_=from_number,
         to=to_number
     )
-    print("📲 SMS sent:", message.sid)
+    print("SMS sent:", message.sid)

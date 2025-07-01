@@ -7,17 +7,17 @@ ret, frame = cap.read()
 cap.release()
 
 if not ret:
-    print("❌ Could not read frame from webcam.")
+    print("Could not read frame from webcam.")
     exit()
 
 # Save debug frame for visual inspection
 cv2.imwrite("test_frame.jpg", frame)
-print("✅ Saved frame as test_frame.jpg")
+print("Saved frame as test_frame.jpg")
 
 # Convert frame to bytes
 img_bytes = frame_to_bytes(frame)
-print("🧪 Image byte size:", len(img_bytes))
+print("Image byte size:", len(img_bytes))
 
 # Send to Rekognition
 result = search_face(img_bytes)
-print("🔍 Rekognition result:", result)
+print("Rekognition result:", result)

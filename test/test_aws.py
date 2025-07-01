@@ -19,8 +19,8 @@ collection_id = 'smart-doorbell-visitors'
 
 try:
     response = rekognition.create_collection(CollectionId=collection_id)
-    print(f"✅ Created collection '{collection_id}' - Status:", response['StatusCode'])
+    print(f"Created collection '{collection_id}' - Status:", response['StatusCode'])
 except rekognition.exceptions.ResourceAlreadyExistsException:
-    print(f"ℹ️ Collection '{collection_id}' already exists.")
+    print(f"Collection '{collection_id}' already exists.")
 except Exception as e:
-    print("❌ Error:", e)
+    print("Error:", e)

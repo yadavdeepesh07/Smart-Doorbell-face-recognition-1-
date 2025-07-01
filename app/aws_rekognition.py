@@ -16,10 +16,10 @@ rekognition = boto3.client(
 def create_collection():
     try:
         rekognition.describe_collection(CollectionId=collection_id)
-        print(f"✅ Collection '{collection_id}' already exists.")
+        print(f"Collection '{collection_id}' already exists.")
     except rekognition.exceptions.ResourceNotFoundException:
         rekognition.create_collection(CollectionId=collection_id)
-        print(f"📦 Created collection: {collection_id}")
+        print(f"Created collection: {collection_id}")
 
 def frame_to_bytes(frame):
     _, buffer = cv2.imencode(".jpg", frame)

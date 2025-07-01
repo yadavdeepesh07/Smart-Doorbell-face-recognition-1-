@@ -18,6 +18,6 @@ def send_email_notification(subject, body, to_email):
         server.login(get_env("EMAIL_ADDRESS"), get_env("EMAIL_PASSWORD"))
         server.sendmail(msg['From'], msg['To'], msg.as_string())
         server.quit()
-        print("✅ Email sent.")
+        print("Email sent.")
     except Exception as e:
-        print("❌ Email failed:", e)
+        print("Email failed:", e)
