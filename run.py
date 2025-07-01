@@ -1,37 +1,46 @@
 import cv2
-import os
-from app.aws_rekognition import (
-    search_face,
-    frame_to_bytes,
-    create_collection
-)
+import time
+from app.aws_rekognition import search_face, frame_to_bytes, create_collection
 from app.notification import send_email_notification
 from app.visitor_log import log_visitor
-from app.sms_alert import send_sms_alert
-from app.config import get_env
+from app.config import get_env, get_config
 
 def main():
     create_collection()
-    cap = cv2.VideoCapture(0)
-    print("📷 Smart Doorbell Camera Running — Press 'q' to quit.")
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
+    if not cap.isOpened():
+        print("❌ Could not open webcam.")
+        return
+
+    print("📷 Smart Doorbell Running — Press 'q' to quit.")
     notified_faces = set()
+    last_check_time = time.time()
 
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("❌ Camera not accessible.")
+            print("❌ Frame capture failed.")
             break
 
-        cv2.imshow("Smart Doorbell - Live Feed", frame)
+        # Live feed toggle
+        if get_config("ENABLE_LIVE_FEED", True):
+            cv2.imshow("Smart Doorbell - Live Feed", frame)
 
-        if int(cap.get(cv2.CAP_PROP_POS_FRAMES)) % 30 == 0:
+        # Check every 1 sec
+        if time.time() - last_check_time > 1:
+            last_check_time = time.time()
+
+            if not get_config("ENABLE_RECOGNITION", True):
+                print("🔒 Face recognition disabled by user.")
+                continue
+
             image_bytes = frame_to_bytes(frame)
             result = search_face(image_bytes)
+            print("🔍 Rekognition result:", result)
 
-            # ⚠️ Skip if no face detected
             if result.get("reason") == "no_face_detected":
-                print("⚠️ No face detected in frame. Skipping.")
+                print("⚠️ No face detected.")
                 continue
 
             if result["matched"]:
@@ -40,13 +49,26 @@ def main():
 
                 if name not in notified_faces:
                     log_visitor(name, confidence, frame)
+
+                    if get_env("ENABLE_EMAIL", "True") == "True":
+                        send_email_notification(
+                            subject="🚪 Visitor Alert",
+                            body=f"{name} is at the door! (Confidence: {confidence:.2f}%)",
+                            to_email=get_env("EMAIL_ADDRESS")
+                        )
+
+                    notified_faces.add(name)
+            else:
+                name = "Unknown"
+                confidence = result.get("confidence", 0)
+                log_visitor(name, confidence, frame)
+
+                if get_env("ENABLE_EMAIL", "True") == "True":
                     send_email_notification(
-                        subject="🚪 Smart Doorbell Alert",
-                        body=f"{name} is at the door! (Confidence: {confidence:.2f}%)",
+                        subject="🚨 Unknown Visitor Alert",
+                        body="An unrecognized person is at your door. Check the dashboard.",
                         to_email=get_env("EMAIL_ADDRESS")
                     )
-                    send_sms_alert(name, confidence)
-                    notified_faces.add(name)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

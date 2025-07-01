@@ -1,16 +1,21 @@
 import json, os, cv2
 from datetime import datetime
 import shutil
+import csv
 
 LOG_FILE = "logs/visitor_log.json"
+CSV_FILE = "logs/visitor_log.csv"
 RAW_DIR = "logs/snapshots"
 STATIC_DIR = "static/snapshots"
 
-# Ensure folders exist
+os.makedirs("logs", exist_ok=True)
 os.makedirs(RAW_DIR, exist_ok=True)
 os.makedirs(STATIC_DIR, exist_ok=True)
 
 def log_visitor(name, confidence, frame):
+    if not name or name.strip().lower() in ["none", ""]:
+        name = "Unknown"
+
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = f"{name}_{timestamp}.jpg"
 
@@ -18,7 +23,6 @@ def log_visitor(name, confidence, frame):
     static_path = os.path.join(STATIC_DIR, filename)
     public_path = f"static/snapshots/{filename}"
 
-    # Save snapshot
     cv2.imwrite(raw_path, frame)
     shutil.copy(raw_path, static_path)
 
@@ -34,9 +38,19 @@ def log_visitor(name, confidence, frame):
             json.dump([], f)
 
     with open(LOG_FILE, 'r+') as f:
-        data = json.load(f)
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            data = []
         data.append(entry)
         f.seek(0)
         json.dump(data, f, indent=2)
 
-    print(f"Logged visitor: {entry}")
+    write_header = not os.path.exists(CSV_FILE)
+    with open(CSV_FILE, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        if write_header:
+            writer.writerow(["Name", "Confidence", "Timestamp", "Snapshot_Path"])
+        writer.writerow([name, round(confidence, 2), entry["timestamp"], public_path])
+
+    print(f"✅ Visitor logged: {entry}")

@@ -1,12 +1,19 @@
-from twilio.rest import Client
 import os
+from twilio.rest import Client
+from app.config import get_env
 
-def send_sms_alert(body):
-    if os.getenv("ENABLE_SMS") != "True":
-        return
-    client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
-    client.messages.create(
+def send_sms_alert(name, confidence):
+    account_sid = get_env("TWILIO_ACCOUNT_SID")
+    auth_token = get_env("TWILIO_AUTH_TOKEN")
+    from_number = get_env("TWILIO_PHONE")
+    to_number = get_env("USER_PHONE")
+
+    client = Client(account_sid, auth_token)
+
+    body = f"🚨 {name} is at your door! Confidence: {confidence:.2f}%"
+    message = client.messages.create(
         body=body,
-        from_=os.getenv("TWILIO_PHONE"),
-        to=os.getenv("USER_PHONE")
+        from_=from_number,
+        to=to_number
     )
+    print("📲 SMS sent:", message.sid)
