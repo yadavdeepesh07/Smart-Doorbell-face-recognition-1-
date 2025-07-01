@@ -60,33 +60,60 @@ smart-doorbell/
 1. **Clone the repo**
 
 git clone https://github.com/yadavdeepesh07/smart-doorbell-face-recognition.git
+
 cd smart-doorbell-face-recognition
 
 2. Create a virtual environment
+
 python -m venv venv
+
 venv\Scripts\activate      # Windows
+
 source venv/bin/activate   # macOS/Linux
-3. Install dependencies
+
+4. Install dependencies
+
+we have added in requirements.txt 
+
 pip install -r requirements.txt
-4. Create a .env file with your AWS Rekognition and Gmail SMTP credentials
+
+if facing issue then install maunally one by one 
+
+6. Create a .env file with your AWS Rekognition and Gmail SMTP credentials
+
+follow the following Structure
+   
 # AWS
+
 AWS_ACCESS_KEY_ID=your_key
+
 AWS_SECRET_ACCESS_KEY=your_secret
+
 AWS_REGION=us-east-1
 
 # Email
+
 EMAIL_ADDRESS=your_email@gmail.com
+
 EMAIL_PASSWORD=your_app_password
 
 # Twilio
+
 TWILIO_ACCOUNT_SID=your_sid
+
 TWILIO_AUTH_TOKEN=your_token
+
 TWILIO_PHONE=+1234567890
+
 USER_PHONE=+919xxxxxxxxx
+
 5. Run the 
     1. Live Face Detection & Alerts
+   
     python run.py
+   
     2. Launch Web Dashboard
+   
     python dashboard.py
 
 Screenshots
@@ -94,7 +121,9 @@ Screenshots
 ![alt text](image.png)
 
 
+
 Security Notes
+
 ✅ Never commit .env or real credentials
 
 ✅ AWS keys are required only for face recognition, not for UI
@@ -102,6 +131,7 @@ Security Notes
 ✅ GitHub blocks pushes with leaked secrets
 
 🧠 Credits
+
 AWS Rekognition
 
 Twilio
